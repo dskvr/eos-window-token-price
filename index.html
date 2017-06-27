@@ -15,7 +15,7 @@ var price_endpoint = 'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsym
 
 if (!web3) { 
     var Web3 = require('web3');
-    var web3 = new Web3(new Web3.providers.HttpProvider('http://rpc.makerdao.com:7777'));
+    var web3 = new Web3(new Web3.providers.HttpProvider('https://rpc.makerdao.com:7777'));
 }
 var version = web3.version.api;
 
