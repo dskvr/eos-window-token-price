@@ -17,6 +17,8 @@ if (!web3) {
 }
 var version = web3.version.api;
 
+console.dir(web3);
+
 $.getJSON('//api.etherscan.io/api?module=contract&action=getabi&address='.CONTRACT, function (data) {
     var contractABI = "";
     contractABI = JSON.parse(data.result);
