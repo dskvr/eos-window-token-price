@@ -23,6 +23,7 @@ console.dir(web3);
 console.log(api_endpoint);
 
 $.getJSON(contract_endpoint, function (data) {
+    console.dir(data);
     var contractABI = "";
     contractABI = JSON.parse(data.result);
     if (contractABI.length){
@@ -31,6 +32,7 @@ $.getJSON(contract_endpoint, function (data) {
 
         // get current price of ETH
         $.getJSON(price_endpoint, function(price) {
+            console.dir(price);
             var usd_per_eth = price.USD;
             var results = '<h1>Price Per ETH: $'+ usd_per_eth+'</h2><br /><br />';
             var days_to_check = 351;
