@@ -8,6 +8,8 @@
 // Config
 
 var CONTRACT = '0xd0a6e6c54dbc68db5db3a091b171a77407ff7ccf';
+var contract_endpoint = '//api.etherscan.io/api?module=contract&action=getabi&address='.CONTRACT;
+var price_endpoint = 'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD';
 
 //
 
@@ -18,20 +20,20 @@ if (!web3) {
 var version = web3.version.api;
 
 console.dir(web3);
+console.log(api_endpoint);
 
-$.getJSON('//api.etherscan.io/api?module=contract&action=getabi&address='.CONTRACT, function (data) {
+$.getJSON(contract_endpoint, function (data) {
     var contractABI = "";
     contractABI = JSON.parse(data.result);
-    if (contractABI != ''){
+    if (contractABI.length){
         var MyContract = web3.eth.contract(contractABI);
         var myContractInstance = MyContract.at(CONTRACT);
 
         // get current price of ETH
-        $.getJSON('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD', function(price) {
+        $.getJSON(price_endpoint, function(price) {
             var usd_per_eth = price.USD;
             var results = '<h1>Price Per ETH: $'+ usd_per_eth+'</h2><br /><br />';
-            var days_to_check = 30;
-
+            var days_to_check = 351;
             // now get the first 50 days of the contract
             for (var i=0; i<days_to_check;i++) {
                 console.log(i);
