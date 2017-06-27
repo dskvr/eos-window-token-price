@@ -15,7 +15,6 @@ var price_endpoint = 'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsym
 
 if (!web3) { 
     var Web3 = require('web3');
-    var web3 = new Web3(new Web3.providers.HttpProvider('https://rpc.makerdao.com:7777'));
 }
 var version = web3.version.api;
 
@@ -27,7 +26,7 @@ $.getJSON(contract_endpoint, function (data) {
     var contractABI = "";
     contractABI = JSON.parse(data.result);
     if (contractABI.length){
-        var MyContract = web3.eth.contract(contractABI);
+        var MyContract = Web3.eth.contract(contractABI);
         var myContractInstance = MyContract.at(CONTRACT);
 
         // get current price of ETH
