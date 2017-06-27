@@ -1,0 +1,95 @@
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="web3.min.js"></script>
+<link rel="stylesheet" ref="styles.css"></link>
+<script>
+
+// Config
+
+var CONTRACT = '0xd0a6e6c54dbc68db5db3a091b171a77407ff7ccf';
+
+//
+
+if (!web3) { 
+    var Web3 = require('web3');
+    var web3 = new Web3(new Web3.providers.HttpProvider('http://rpc.makerdao.com:7777'));   
+}
+var version = web3.version.api;
+
+$.getJSON('//api.etherscan.io/api?module=contract&action=getabi&address='.CONTRACT, function (data) {
+    var contractABI = "";
+    contractABI = JSON.parse(data.result);
+    if (contractABI != ''){
+        var MyContract = web3.eth.contract(contractABI);
+        var myContractInstance = MyContract.at(CONTRACT);
+
+        // get current price of ETH
+        $.getJSON('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD', function(price) {
+            var usd_per_eth = price.USD;
+            var results = '<h1>Price Per ETH: $'+ usd_per_eth+'</h2><br /><br />';
+            var days_to_check = 30;
+
+            // now get the first 50 days of the contract
+            for (var i=0; i<days_to_check;i++) {
+                console.log(i);
+                var result = myContractInstance.dailyTotals(i);
+                var formatted_result = formatResult(i,result,usd_per_eth);
+                console.log(formatted_result);
+                results += formatted_result;
+                // pause a bit to be nice to the API.
+                sleep(300);
+            }
+            // display results
+            jQuery("#results").html(results);
+        });
+    } else {
+        console.log("Error" );
+    }
+});
+
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
+
+/* console shim*/
+(function () {
+    var f = function () {};
+    if (!window.console) {
+        window.console = {
+            log:f, info:f, warn:f, debug:f, error:f
+        };
+    }
+}());
+    
+function formatResult(day,result,usd_per_eth)
+{
+    var divisor = 1000000000000000000;
+    var results = '';
+    var eos = (result/divisor);
+    var eos_string = eos.toFixed(2)+'';
+    eos_string = eos_string.padStart(20,'.');
+    results += 'Day '+day+' Total ETH: '+eos_string;
+    results = results.padStart(20,'&nbsp;');
+    var eos_per_window = 2000000;
+    if (day == 0) {
+        eos_per_window = 200000000;
+    }
+    var usd_total = eos * usd_per_eth;
+    var price_per_eos = usd_total / eos_per_window;
+    results += ' &nbsp;&nbsp;&nbsp;&nbsp;Price per EOS in USD: $' + price_per_eos.toFixed(6);
+    results += '<br />';
+    return results;
+}
+</script>
+
+</head>
+<body>
+<div id='results'></div>
+</body>
+</html>
