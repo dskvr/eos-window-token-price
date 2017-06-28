@@ -44,6 +44,10 @@ body.rate-eth table td span.rate.eth {display:block;}
 
 body.rate-usd table tr a.rate.usd, body.rate-eth table tr a.rate.eth  { color:#fff; font-weight:bold; background:#333; border-radius:2px; display:inline-block; padding:2px 3px;}
 
+.meta { position:absolute; right:10px; top:10px; padding:12px; color:#999; font-size:9pt; width:222px;}
+.meta h2 {font-size:11pt;}
+.meta a {color:#add8e6; text-decoration:none; }
+
 @media screen and (min-width: 1000px) {
   body.loading #background-image {opacity:0;}
   body.results #background-image { left:-25%; opacity:.1;}
@@ -51,6 +55,8 @@ body.rate-usd table tr a.rate.usd, body.rate-eth table tr a.rate.eth  { color:#f
   #background-image img {max-height:50%;}
 }
 
+
 @media screen and (max-width: 999px) {
   body.loading #background-image {display:none;}
 }
+
