@@ -1,0 +1,29 @@
+INFO [06-28|01:38:21] Starting peer-to-peer node               instance=Geth/v1.6.5-stable-cf87713d/darwin-amd64/go1.8.3
+INFO [06-28|01:38:21] Allocated cache and file handles         database=/Users/dskvr/Library/Ethereum/geth/chaindata cache=128 handles=1024
+INFO [06-28|01:38:21] Initialised chain configuration          config="{ChainID: 1 Homestead: 1150000 DAO: 1920000 DAOSupport: true EIP150: 2463000 EIP155: 2675000 EIP158: 2675000 Metropolis: 9223372036854775807 Engine: ethash}"
+INFO [06-28|01:38:21] Disk storage enabled for ethash caches   dir=/Users/dskvr/Library/Ethereum/geth/ethash count=3
+INFO [06-28|01:38:21] Disk storage enabled for ethash DAGs     dir=/Users/dskvr/.ethash                      count=2
+INFO [06-28|01:38:21] Initialising Ethereum protocol           versions="[63 62]" network=1
+INFO [06-28|01:38:21] Loaded most recent local header          number=680825 hash=79b9a8…d6ee9a td=4108038918064036254
+INFO [06-28|01:38:21] Loaded most recent local full block      number=0      hash=d4e567…cb8fa3 td=17179869184
+INFO [06-28|01:38:21] Loaded most recent local fast block      number=644403 hash=87d3f9…aa4b8c td=3825136325420749075
+INFO [06-28|01:38:21] Starting P2P networking 
+INFO [06-28|01:38:24] UDP listener up                          self=enode://d4f86eefe9a729414aed7496ea77185f732abd7da4ebe41140dde883160cd895f59c0a356f9a09e5e6f8c6a95020c1486bafaa858cffd5ca5a9267190932191e@94.21.79.56:30303
+INFO [06-28|01:38:24] RLPx listener up                         self=enode://d4f86eefe9a729414aed7496ea77185f732abd7da4ebe41140dde883160cd895f59c0a356f9a09e5e6f8c6a95020c1486bafaa858cffd5ca5a9267190932191e@94.21.79.56:30303
+INFO [06-28|01:38:24] IPC endpoint opened: /Users/dskvr/Library/Ethereum/geth.ipc 
+INFO [06-28|01:38:24] IPC endpoint closed: /Users/dskvr/Library/Ethereum/geth.ipc 
+INFO [06-28|01:38:24] Blockchain manager stopped 
+INFO [06-28|01:38:24] Stopping Ethereum protocol 
+INFO [06-28|01:38:24] Ethereum protocol stopped 
+INFO [06-28|01:38:24] Transaction pool stopped 
+ERROR[06-28|01:38:24] Unhandled trie error: Missing trie node c954a344a1295f78ab08d8ccd56ad1becc3c64c11b18798526518409aff5a2d2 
+ERROR[06-28|01:38:24] Unhandled trie error: Missing trie node 89d613f26159af43616fd9455bb461f4869bfede26f2130835ed067a8b967bfb 
+ERROR[06-28|01:38:24] Unhandled trie error: Missing trie node 7117ef9fc932f1a88e908eaead8565c19b5645dc9e5b1b6e841c5edbdfd71681 
+ERROR[06-28|01:38:24] Unhandled trie error: Missing trie node 7117ef9fc932f1a88e908eaead8565c19b5645dc9e5b1b6e841c5edbdfd71681 
+ERROR[06-28|01:38:24] Unhandled trie error: Missing trie node a5f3f2f7542148c973977c8a1e154c4300fec92f755f7846f1b734d3ab1d90e7 
+ERROR[06-28|01:38:24] Unhandled trie error: Missing trie node a5f3f2f7542148c973977c8a1e154c4300fec92f755f7846f1b734d3ab1d90e7 
+ERROR[06-28|01:38:24] Failed to retrieve current release       err="Missing trie node d7f8974fb5ac78d9ac099b9ad5018bedc2ce0a72dad1827a1709da30580f0544"
+INFO [06-28|01:38:24] Database closed                          database=/Users/dskvr/Library/Ethereum/geth/chaindata
+INFO [06-28|01:38:24] Mapped network port                      proto=udp extport=30303 intport=30303 interface="UPNP IGDv1-IP1"
+INFO [06-28|01:38:24] Mapped network port                      proto=tcp extport=30303 intport=30303 interface="UPNP IGDv1-IP1"
+Fatal: Error starting protocol stack: listen tcp 127.0.0.1:8545: bind: address already in use
