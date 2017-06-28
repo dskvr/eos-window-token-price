@@ -126,7 +126,7 @@ function formatResult(day,eth_contributed_long,usd_per_eth,today)
     return results;
 }
 
-var reset = function(){
+var reset_results = function(){
     jQuery("#results").html('');
     $('body').removeClass('results');
     iterator_position = 0;
@@ -148,7 +148,7 @@ var node, nodeTO;
 $(function(){    
     $('#set-node').submit(function(e){
         e.preventDefault();
-        reset();
+        reset_results();
         var node = $(this).find('input.node').val();
         var days = $(this).find('input.days-to-check').val();
         // console.log(typeof days);
