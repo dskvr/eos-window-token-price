@@ -63,14 +63,23 @@ var iterator = function(){
         dom_state.complete();
         return;
     }
-    var pause = function(){
-        iterator_pause = setTimeout(function(){
-            iterator_position++;
-            iterator();
-        }, iterator_pause_length);
+    var next = function(){
+        iterator_position++;
+        iterator();
     }
+
+    var pause = function(){
+        if(iterator_pause_length > 0) {
+            iterator_pause = setTimeout(function(){
+                next();
+            }, iterator_pause_length);
+        } else {
+            next();
+        }
+    }
+    
     factory(iterator_position);
-    pause();
+    next();
 }
 
 var dom_state = {};
