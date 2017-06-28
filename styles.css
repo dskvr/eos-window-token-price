@@ -10,11 +10,6 @@ body {background:#000 url(); color:#f0f0f0; font-family: 'Source Code Pro', mono
 #wrapper { max-width:700px; min-width:400px; margin:0 auto; position:relative; z-index:50; padding:10px;} 
 #table-wrapper {  background:rgba(9,9,9,0.5);  padding:11px; border-radius:3px;}
 
-body.loading #background-image {opacity:0;}
-body.results #background-image { left:-25%; opacity:.1;}
-#background-image { transition:all 1s ease-in-out; opacity:.1; position:absolute; z-index:1;  } 
-#background-image img {max-height:50%;}
-
 table { width:100%; }
 table th, table td {padding:3px 0;}
 table th { color:#c0c0c0; font-weight:bold; text-transform: uppercase; text-align:right; }
@@ -40,3 +35,14 @@ form input { background:#303030; color:yellow; font-size:20pt; border:0; margin:
 form input.node {width:48%;}
 form input.days-to-check {width:23%;}
 form input[type=submit] {width:23%;}
+
+@media screen and (min-width: 1000px) {
+  body.loading #background-image {opacity:0;}
+  body.results #background-image { left:-25%; opacity:.1;}
+  #background-image { transition:all 1s ease-in-out; opacity:.1; position:absolute; z-index:1;  } 
+  #background-image img {max-height:50%;}
+}
+
+@media screen and (max-width: 999px) {
+  body.loading #background-image {display:none;}
+}
