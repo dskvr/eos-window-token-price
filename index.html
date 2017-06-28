@@ -59,7 +59,7 @@ var iterator_start = function(){
 
 var iterator = function(){
     if(iterator_position == num_windows) {
-        // jQuery("#results").html(results);
+        $('body').addClass('results');
         dom_state.complete();
         return;
     }
@@ -142,6 +142,8 @@ var node, nodeTO;
 $(function(){    
     $('#set-node').submit(function(e){
         e.preventDefault();
+        jQuery("#results").html('');
+        $('body').removeClass('results');
         var node = $(this).find('input.node').val();
         var days = $(this).find('input.days-to-check').val();
         // console.log(typeof days);
@@ -165,6 +167,9 @@ $(function(){
 
 </head>
 <body>
+
+<div id="background-image"><img src="./EOS_spinning_logo.gif" /></div>
+
 <div id="wrapper">
     <form id="set-node">
        <input type="text" class="node" placeholder="node url" />
@@ -188,7 +193,7 @@ $(function(){
     </div>
 </div>
 
-<!-- <div id="background-image"><img src="./EOS_spinning_logo.gif" /></div> -->
+
 
 </body>
 
