@@ -5,7 +5,7 @@
 <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:300|Work+Sans:300" rel="stylesheet">
 <link rel="stylesheet" href="./styles.css?v=5489054"></link>
 <script>
-var Web3 = require('web3'), web3, num_windows = 30, max_num_windows = 341, loading_percentage = 0, loop_buffer=100, usd_per_eth, Contract, ContractInstance;
+var Web3 = require('web3'), web3, num_windows = 30, max_num_windows = 341, loading_percentage = 0, loop_buffer=100, usd_per_eth, Contract, EOSCrowdsale, window_today;
 
 var iterator_timeout, iterator_pause, iterator_pause_length = 0, iterator_position = 0;
 
@@ -18,8 +18,8 @@ var eos_sale = {}
         contractABI = JSON.parse(data.result);
         if (contractABI != ''){
             Contract = web3.eth.contract(contractABI);
-            ContractInstance = Contract.at("0xd0a6e6c54dbc68db5db3a091b171a77407ff7ccf");
-
+            EOSCrowdsale = Contract.at("0xd0a6e6c54dbc68db5db3a091b171a77407ff7ccf");
+            window_today = EOSCrowdsale.today();
             // get current price of ETH
             $.getJSON('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD', function(price) {
                 usd_per_eth = price.USD;
@@ -37,16 +37,16 @@ var eos_sale = {}
 var query_contract = function(eos, pos){
     var     result = {};
             result.daily_totals = eos.dailyTotals(pos);
-            result.today = eos.today();
+            result.available_in_window = eos.createOnDay(pos)/1000000000000000000;
     return  result;
 }
 
 var factory = function(pos){
     var query;
     // console.log(pos);
-    query = query_contract(ContractInstance, pos);
+    query = query_contract(EOSCrowdsale, pos);
     //
-    var formatted_result = formatResult(pos,query.daily_totals,usd_per_eth,query.today);
+    var formatted_result = formatResult(pos,query.daily_totals,usd_per_eth,window_today, query.available_in_window);
     // console.log(formatted_result);
     // results += formatted_result;    
     jQuery("#results").append(formatted_result);
@@ -97,7 +97,7 @@ var loadingStatus = function(cur, total){
     $('.loader .bar').css({width: percent+"%"});
 }
 
-function formatResult(day,result,usd_per_eth,today)
+function formatResult(day,result,usd_per_eth,today,tokens_avail)
 {
     var divisor = 1000000000000000000;
     var results = '';
@@ -120,6 +120,7 @@ function formatResult(day,result,usd_per_eth,today)
     //
     results += '<tr class="'+tr_class+'">';
     results += '<td class="day">'+day+'</span>';
+    results += '<td class="available">'+tokens_avail+'</span>';
     results += '<td class="contributed">'+eos_string+'</td>';
     results += '<td class="rate">$' + price_per_eos.toFixed(6) + "</td>";
     results += '</tr>';
@@ -184,8 +185,9 @@ $(function(){
         <thead>
         <tr>
             <th>Window</th>
+            <th>EOS Available</th>
             <th>ETH Contributed</th>
-            <th>Effective Rate per EOS</th>
+            <th>USD Rate Per EOS</th>
         <tr>
         </thead>
         <tbody id="results">
