@@ -2,64 +2,128 @@
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="web3.min.js"></script>
-<link rel="stylesheet" ref="styles.css"></link>
+<link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:300|Work+Sans:300" rel="stylesheet">
+<link rel="stylesheet" href="./styles.css?v=5489054"></link>
 <script>
+var Web3 = require('web3'), web3, num_windows = 30, max_num_windows = 341, loading_percentage = 0, loop_buffer=100, usd_per_eth, Contract, ContractInstance;
 
-// Config
+var iterator_timeout, iterator_pause, iterator_pause_length = 0, iterator_position = 0;
 
-var CONTRACT = '0xd0a6e6c54dbc68db5db3a091b171a77407ff7ccf';
-var contract_endpoint = '//api.etherscan.io/api?module=contract&action=getabi&address='+CONTRACT;
-var price_endpoint = 'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD';
+var eos_sale = {}
+    eos_sale.init = function(){
+        dom_state.run();
+        dom_state.loading();
+        $.getJSON('//api.etherscan.io/api?module=contract&action=getabi&address=0xd0a6e6c54dbc68db5db3a091b171a77407ff7ccf', function (data) {
+        var contractABI = "";
+        contractABI = JSON.parse(data.result);
+        if (contractABI != ''){
+            Contract = web3.eth.contract(contractABI);
+            ContractInstance = Contract.at("0xd0a6e6c54dbc68db5db3a091b171a77407ff7ccf");
 
-//
-
-if (!web3) { 
-    var Web3 = require('web3');
-}
-var version = web3.version.api;
-
-console.dir(web3);
-console.log(contract_endpoint);
-
-$.getJSON(contract_endpoint, function (data) {
-    console.dir(data);
-    var contractABI = "";
-    contractABI = JSON.parse(data.result);
-    if (contractABI.length){
-        var MyContract = Web3.eth.contract(contractABI);
-        var myContractInstance = MyContract.at(CONTRACT);
-
-        // get current price of ETH
-        $.getJSON(price_endpoint, function(price) {
-            console.dir(price);
-            var usd_per_eth = price.USD;
-            var results = '<h1>Price Per ETH: $'+ usd_per_eth+'</h2><br /><br />';
-            var days_to_check = 351;
-            // now get the first 50 days of the contract
-            for (var i=0; i<days_to_check;i++) {
-                console.log(i);
-                var result = myContractInstance.dailyTotals(i);
-                var formatted_result = formatResult(i,result,usd_per_eth);
-                console.log(formatted_result);
-                results += formatted_result;
-                // pause a bit to be nice to the API.
-                sleep(300);
-            }
-            // display results
-            jQuery("#results").html(results);
-        });
-    } else {
-        console.log("Error" );
+            // get current price of ETH
+            $.getJSON('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD', function(price) {
+                usd_per_eth = price.USD;
+                iterator_start();
+            });
+        } else {
+            console.log("Error" );
+        }
+    });
     }
-});
+    eos_sale.incompatible = function(){
+        $('body').addClass('incompatible');
+    }
 
-function sleep(milliseconds) {
+var query_contract = function(eos, pos){
+    var     result = {};
+            result.daily_totals = eos.dailyTotals(pos);
+            result.today = eos.today();
+    return  result;
+}
+
+var factory = function(pos){
+    var query;
+    console.log(pos);
+    query = query_contract(ContractInstance, pos);
+    //
+    var formatted_result = formatResult(pos,query.daily_totals,usd_per_eth,query.today);
+    console.log(formatted_result);
+    // results += formatted_result;    
+    jQuery("#results").append(formatted_result);
+    loadingStatus(pos, num_windows);
+}
+
+var iterator_start = function(){
+    iterator();
+}
+
+var iterator = function(){
+    if(iterator_position == num_windows) {
+        // jQuery("#results").html(results);
+        dom_state.complete();
+        return;
+    }
+    var pause = function(){
+        iterator_pause = setTimeout(function(){
+            iterator_position++;
+            iterator();
+        }, iterator_pause_length);
+    }
+    factory(iterator_position);
+    pause();
+}
+
+var dom_state = {};
+    dom_state.run = function(){ $('body').addClass('run'); }
+    dom_state.set = function(){ $('body').removeClass('run'); }
+    dom_state.loading = function(){ $('body').addClass('loading'); }
+    dom_state.complete = function(){ $('body').removeClass('loading'); }
+
+
+
+
+var sleep = function(milliseconds) {
   var start = new Date().getTime();
   for (var i = 0; i < 1e7; i++) {
     if ((new Date().getTime() - start) > milliseconds){
       break;
     }
   }
+}
+
+var loadingStatus = function(cur, total){
+    var percent = Math.round(cur/total*100);
+    $('.loader .status').text(percent+"%");
+    $('.loader .bar').css({width: percent+"%"});
+}
+
+function formatResult(day,result,usd_per_eth,today)
+{
+    var divisor = 1000000000000000000;
+    var results = '';
+    var eos = (result/divisor);
+    var eos_string = eos.toFixed(2)+'';
+    // eos_string = eos_string.padStart(20,'.');
+    // results = results.padStart(20,'&nbsp;');
+    var eos_per_window = 2000000;
+    if (day == 0) {
+        eos_per_window = 200000000;
+    }
+    var usd_total = eos * usd_per_eth;
+    var price_per_eos = usd_total / eos_per_window;
+    var window_passed = (day < today) ? true : false;
+    var is_today = (day == today) ? true : false;
+    //
+    var tr_class;
+    tr_class = (window_passed) ? "window-closed" : "window-open";
+    tr_class = (is_today) ? " is-today" : tr_class;
+    //
+    results += '<tr class="'+tr_class+'">';
+    results += '<td class="day">'+day+'</span>';
+    results += '<td class="contributed">'+eos_string+'</td>';
+    results += '<td class="rate">$' + price_per_eos.toFixed(6) + "</td>";
+    results += '</tr>';
+    return results;
 }
 
 /* console shim*/
@@ -71,30 +135,54 @@ function sleep(milliseconds) {
         };
     }
 }());
-    
-function formatResult(day,result,usd_per_eth)
-{
-    var divisor = 1000000000000000000;
-    var results = '';
-    var eos = (result/divisor);
-    var eos_string = eos.toFixed(2)+'';
-    eos_string = eos_string.padStart(20,'.');
-    results += 'Day '+day+' Total ETH: '+eos_string;
-    results = results.padStart(20,'&nbsp;');
-    var eos_per_window = 2000000;
-    if (day == 0) {
-        eos_per_window = 200000000;
-    }
-    var usd_total = eos * usd_per_eth;
-    var price_per_eos = usd_total / eos_per_window;
-    results += ' &nbsp;&nbsp;&nbsp;&nbsp;Price per EOS in USD: $' + price_per_eos.toFixed(6);
-    results += '<br />';
-    return results;
-}
+
+// ADD YOUR KEY HERE (get one via https://infura.io/register.html )
+var node, nodeTO;
+
+$(function(){    
+    $('#set-node').submit(function(e){
+        e.preventDefault();
+        var node = $(this).find('input.node').val();
+        var days = $(this).find('input.days-to-check').val();
+        if(!days || typeof days !== "integer"){
+        } else if(days > max_num_windows) {
+            $(this).find('input.days-to-check').attr('value', max_num_windows);
+        } else {
+            num_windows = days;
+        }
+        web3 = new Web3(new Web3.providers.HttpProvider(node));
+        eos_sale.init();
+        return false;
+    });
+});
+
 </script>
 
 </head>
 <body>
-<div id='results'></div>
+<div id="wrapper">
+    <form id="set-node">
+       <input type="text" class="node" placeholder="node url" />
+       <input type="text" class="days-to-check" placeholder="show days" />
+       <input type="submit" />
+    </form>
+
+    <div class="loader"><span class="bar"></span><span class="status"></span></div>
+
+    <div id="table-wrapper">
+        <table class="">
+        <thead>
+        <tr>
+            <th>Window</th>
+            <th>ETH Contributed</th>
+            <th>Effective Rate per EOS</th>
+        <tr>
+        </thead>
+        <tbody id="results">
+        </tbody>
+    </div>
+</div>
+
 </body>
+
 </html>
