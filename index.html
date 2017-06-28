@@ -126,6 +126,12 @@ function formatResult(day,eth_contributed_long,usd_per_eth,today)
     return results;
 }
 
+var reset = function(){
+    jQuery("#results").html('');
+    $('body').removeClass('results');
+    iterator_position = 0;
+}
+
 /* console shim*/
 (function () {
     var f = function () {};
@@ -142,8 +148,7 @@ var node, nodeTO;
 $(function(){    
     $('#set-node').submit(function(e){
         e.preventDefault();
-        jQuery("#results").html('');
-        $('body').removeClass('results');
+        reset();
         var node = $(this).find('input.node').val();
         var days = $(this).find('input.days-to-check').val();
         // console.log(typeof days);
