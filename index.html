@@ -37,7 +37,7 @@ var eos_sale = {}
 var query_contract = function(eos, pos){
     var     result = {};
             result.daily_totals = eos.dailyTotals(pos);
-            result.available_in_window = eos.createOnDay(pos)/1000000000000000000;
+            // result.available_in_window = eos.createOnDay(pos)/1000000000000000000;
     return  result;
 }
 
@@ -46,7 +46,7 @@ var factory = function(pos){
     // console.log(pos);
     query = query_contract(EOSCrowdsale, pos);
     //
-    var formatted_result = formatResult(pos,query.daily_totals,usd_per_eth,window_today, query.available_in_window);
+    var formatted_result = formatResult(pos,query.daily_totals,usd_per_eth,window_today);
     // console.log(formatted_result);
     // results += formatted_result;    
     jQuery("#results").append(formatted_result);
@@ -79,9 +79,6 @@ var dom_state = {};
     dom_state.loading = function(){ $('body').addClass('loading'); }
     dom_state.complete = function(){ $('body').removeClass('loading'); }
 
-
-
-
 var sleep = function(milliseconds) {
   var start = new Date().getTime();
   for (var i = 0; i < 1e7; i++) {
@@ -97,20 +94,22 @@ var loadingStatus = function(cur, total){
     $('.loader .bar').css({width: percent+"%"});
 }
 
-function formatResult(day,result,usd_per_eth,today,tokens_avail)
+function formatResult(day,eth_contributed_long,usd_per_eth,today)
 {
     var divisor = 1000000000000000000;
     var results = '';
-    var eos = (result/divisor);
-    var eos_string = eos.toFixed(2)+'';
+    var eth_contributed = (eth_contributed_long/divisor);
+    var eos_string = eth_contributed.toFixed(2)+'';
     // eos_string = eos_string.padStart(20,'.');
     // results = results.padStart(20,'&nbsp;');
     var eos_per_window = 2000000;
     if (day == 0) {
         eos_per_window = 200000000;
     }
-    var usd_total = eos * usd_per_eth;
-    var price_per_eos = usd_total / eos_per_window;
+    var eth_per_eos = eth_contributed / eos_per_window;
+    var usd_total = eth_contributed * usd_per_eth;
+    var usd_per_eos = usd_total / eos_per_window;
+
     var window_passed = (day < today) ? true : false;
     var is_today = (day == today) ? true : false;
     //
@@ -120,9 +119,9 @@ function formatResult(day,result,usd_per_eth,today,tokens_avail)
     //
     results += '<tr class="'+tr_class+'">';
     results += '<td class="day">'+day+'</span>';
-    results += '<td class="available">'+tokens_avail+'</span>';
+    results += '<td class="available">'+eos_per_window+'</span>';
     results += '<td class="contributed">'+eos_string+'</td>';
-    results += '<td class="rate">$' + price_per_eos.toFixed(6) + "</td>";
+    results += '<td class="rate"><span class="rate usd">$' + usd_per_eos.toFixed(6) + '</span><span class="rate eth">'+eth_per_eos.toFixed(6)+'</span></td>';
     results += '</tr>';
     return results;
 }
@@ -162,12 +161,25 @@ $(function(){
         eos_sale.init();
         return false;
     });
+
+    $('table tr a.rate').on('click', function(){
+        switch( $(this).text() ){
+            case "USD":
+                $('body').removeClass('rate-eth').addClass('rate-usd');
+                break;
+            case "ETH":
+                $('body').removeClass('rate-usd').addClass('rate-eth');
+                break;
+        }
+    });
+
+    setTimeout(function(){$('input.node:first').focus();},500);
 });
 
 </script>
 
 </head>
-<body>
+<body class="rate-usd">
 
 <div id="background-image"><img src="./EOS_spinning_logo.gif" /></div>
 
@@ -187,7 +199,7 @@ $(function(){
             <th>Window</th>
             <th>EOS Available</th>
             <th>ETH Contributed</th>
-            <th>USD Rate Per EOS</th>
+            <th>Rate Per EOS <a href="#" class="rate usd">USD</a> <a href="#" class="rate eth">ETH</a></th>
         <tr>
         </thead>
         <tbody id="results">
