@@ -3,10 +3,15 @@ body form { display:block; }
 body .loader {display:none;}
 body.loading .loader {display:block;}
 
-body {background:#000; color:#f0f0f0; font-family: 'Source Code Pro', monospace; }
 
-#wrapper { max-width:700px; min-width:400px; margin:0 auto; position:relative; padding:10px;} 
+body {background:#000 url(); color:#f0f0f0; font-family: 'Source Code Pro', monospace; }
+
+#wrapper { max-width:700px; min-width:400px; margin:0 auto; position:relative; z-index:50; padding:10px;} 
 #table-wrapper {}
+
+#background-image { transition:all 1s ease-in-out; opacity:.5; position:absolute; z-index:1;} 
+#background-image img {max-height:50%;}
+body.loading #background-image { opacity:0; }
 
 table {  background:#101010; width:100%; }
 table th, table td {padding:3px 0;}

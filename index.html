@@ -63,23 +63,14 @@ var iterator = function(){
         dom_state.complete();
         return;
     }
-    var next = function(){
-        iterator_position++;
-        iterator();
-    }
-
     var pause = function(){
-        if(iterator_pause_length > 0) {
-            iterator_pause = setTimeout(function(){
-                next();
-            }, iterator_pause_length);
-        } else {
-            next();
-        }
+        iterator_pause = setTimeout(function(){
+            iterator_position++;
+            iterator();
+        }, iterator_pause_length);
     }
-    
     factory(iterator_position);
-    next();
+    pause();
 }
 
 var dom_state = {};
@@ -196,6 +187,8 @@ $(function(){
         </tbody>
     </div>
 </div>
+
+<div id="background-image"><img src="./EOS_spinning_logo.gif" /></div>
 
 </body>
 
