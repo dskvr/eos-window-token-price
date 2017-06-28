@@ -57,7 +57,7 @@ var iterator_start = function(){
 }
 
 var iterator = function(stop){
-    if(iterator_position => num_windows) {
+    if(iterator_position >= num_windows) {
         $('body').addClass('results');
         dom_state.complete();
         return;
@@ -195,7 +195,7 @@ $(function(){
     <div class="loader"><span class="bar"></span><span class="status"></span></div>
 
     <div id="table-wrapper">
-        <table class="">
+        <table class="" border="0">
         <thead>
         <tr>
             <th>Window</th>
