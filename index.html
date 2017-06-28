@@ -57,7 +57,7 @@ var iterator_start = function(){
 }
 
 var iterator = function(stop){
-    if(iterator_position == num_windows) {
+    if(iterator_position => num_windows) {
         $('body').addClass('results');
         dom_state.complete();
         return;
