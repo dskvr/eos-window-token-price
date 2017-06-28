@@ -37,16 +37,15 @@ var eos_sale = {}
 var query_contract = function(eos, pos){
     var     result = {};
             result.daily_totals = eos.dailyTotals(pos);
-            // result.available_in_window = eos.createOnDay(pos)/1000000000000000000;
+            result.eos_in_window = eos.createOnDay(pos)/1000000000000000000;
     return  result;
 }
 
 var factory = function(pos){
     var query;
     // console.log(pos);
-    query = query_contract(EOSCrowdsale, pos);
     //
-    var formatted_result = formatResult(pos,query.daily_totals,usd_per_eth,window_today);
+    var formatted_result = formatResult(pos,usd_per_eth,window_today);
     // console.log(formatted_result);
     // results += formatted_result;    
     jQuery("#results").append(formatted_result);
@@ -57,27 +56,27 @@ var iterator_start = function(){
     iterator();
 }
 
-var iterator = function(){
+var iterator = function(stop){
     if(iterator_position == num_windows) {
         $('body').addClass('results');
         dom_state.complete();
         return;
     }
     var pause = function(){
-        iterator_pause = setTimeout(function(){
+        iterator_timeout = setTimeout(function(){
             iterator_position++;
             iterator();
-        }, iterator_pause_length);
+        }, iterator_pause_length)
     }
     factory(iterator_position);
     pause();
 }
 
 var dom_state = {};
-    dom_state.run = function(){ $('body').addClass('run'); }
+    dom_state.run = function(){ $('body').addClass('run');  }
     dom_state.set = function(){ $('body').removeClass('run'); }
-    dom_state.loading = function(){ $('body').addClass('loading'); }
-    dom_state.complete = function(){ $('body').removeClass('loading'); }
+    dom_state.loading = function(){ $('body').addClass('loading'); $('body form input[type=submit]').attr('disabled', true) }
+    dom_state.complete = function(){ $('body').removeClass('loading'); $('body form input[type=submit]').attr('disabled', false) }
 
 var sleep = function(milliseconds) {
   var start = new Date().getTime();
@@ -94,18 +93,16 @@ var loadingStatus = function(cur, total){
     $('.loader .bar').css({width: percent+"%"});
 }
 
-function formatResult(day,eth_contributed_long,usd_per_eth,today)
+function formatResult(day,usd_per_eth,today)
 {
+    var query = query_contract(EOSCrowdsale, day);
     var divisor = 1000000000000000000;
     var results = '';
-    var eth_contributed = (eth_contributed_long/divisor);
+    var eth_contributed = (query.daily_totals/divisor);
     var eos_string = eth_contributed.toFixed(2)+'';
     // eos_string = eos_string.padStart(20,'.');
     // results = results.padStart(20,'&nbsp;');
-    var eos_per_window = 2000000;
-    if (day == 0) {
-        eos_per_window = 200000000;
-    }
+    var eos_per_window = query.eos_in_window;
     var eth_per_eos = eth_contributed / eos_per_window;
     var usd_total = eth_contributed * usd_per_eth;
     var usd_per_eos = usd_total / eos_per_window;
@@ -191,7 +188,7 @@ $(function(){
 <div id="wrapper">
     <form id="set-node">
        <input type="text" class="node" placeholder="node url" />
-       <input type="text" class="days-to-check" placeholder="show days" />
+       <input type="text" class="days-to-check" placeholder="windows" />
        <input type="submit" />
     </form>
 

@@ -33,6 +33,7 @@ form input { background:#303030; color:yellow; font-size:20pt; border:0; margin:
 form input.node {width:48%;}
 form input.days-to-check {width:23%;}
 form input[type=submit] {width:23%;}
+form input[type=submit]:disabled {opacity:0.22;}
 
 table span.rate.usd, table span.rate.eth {display:none;} 
 
@@ -46,7 +47,7 @@ body.rate-usd table tr a.rate.usd, body.rate-eth table tr a.rate.eth  { color:#f
 @media screen and (min-width: 1000px) {
   body.loading #background-image {opacity:0;}
   body.results #background-image { left:-25%; opacity:.1;}
-  #background-image { transition:all 1s ease-in-out; opacity:.1; position:absolute; z-index:1;  } 
+  #background-image { transition:all 1s ease-in-out; opacity:.1; position:fixed; z-index:1;  } 
   #background-image img {max-height:50%;}
 }
 
