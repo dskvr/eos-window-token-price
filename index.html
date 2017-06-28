@@ -26,7 +26,7 @@ var eos_sale = {}
                 iterator_start();
             });
         } else {
-            console.log("Error" );
+            // console.log("Error" );
         }
     });
     }
@@ -43,11 +43,11 @@ var query_contract = function(eos, pos){
 
 var factory = function(pos){
     var query;
-    console.log(pos);
+    // console.log(pos);
     query = query_contract(ContractInstance, pos);
     //
     var formatted_result = formatResult(pos,query.daily_totals,usd_per_eth,query.today);
-    console.log(formatted_result);
+    // console.log(formatted_result);
     // results += formatted_result;    
     jQuery("#results").append(formatted_result);
     loadingStatus(pos, num_windows);
@@ -154,7 +154,7 @@ $(function(){
             $(this).find('input.days-to-check').attr('value', max_num_windows);
         }
         num_windows = days;
-        console.log(num_windows);
+        // console.log(num_windows);
         web3 = new Web3(new Web3.providers.HttpProvider(node));
         eos_sale.init();
         return false;
