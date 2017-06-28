@@ -126,7 +126,7 @@ function formatResult(day,eth_contributed_long,usd_per_eth,today)
     return results;
 }
 
-var reset_results = function(){
+function reset_results(){
     jQuery("#results").html('');
     $('body').removeClass('results');
     iterator_position = 0;
