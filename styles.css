@@ -58,6 +58,7 @@ body.rate-usd table tr a.rate.usd, body.rate-eth table tr a.rate.eth  { color:#f
 
 
 @media screen and (max-width: 999px) {
-  body.loading #background-image {display:none;}
+  #background-image {display:none;}
+  body .meta {display:none;}
 }
 
