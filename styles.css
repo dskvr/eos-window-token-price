@@ -12,6 +12,8 @@ table {  background:#101010; width:100%; }
 table th, table td {padding:3px 0;}
 table th { color:#c0c0c0; font-weight:bold; text-transform: uppercase; text-align:right; }
 table td { text-align:right; }
+table tr {cursor:pointer;}
+table tr:hover td {background:#191919;}
 /*table td.contributed { text-align:left; }*/
 
 table tr.is-today { color:yellow; background:#000; }

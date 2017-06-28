@@ -144,12 +144,17 @@ $(function(){
         e.preventDefault();
         var node = $(this).find('input.node').val();
         var days = $(this).find('input.days-to-check').val();
-        if(!days || typeof days !== "integer"){
-        } else if(days > max_num_windows) {
-            $(this).find('input.days-to-check').attr('value', max_num_windows);
-        } else {
-            num_windows = days;
+        // console.log(typeof days);
+        if(!days){
+            $(this).find('input.days-to-check').attr('value', num_windows);
+            days = num_windows;
         }
+        if(days > max_num_windows) {
+            days = max_num_windows;
+            $(this).find('input.days-to-check').attr('value', max_num_windows);
+        }
+        num_windows = days;
+        console.log(num_windows);
         web3 = new Web3(new Web3.providers.HttpProvider(node));
         eos_sale.init();
         return false;
