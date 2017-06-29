@@ -25,9 +25,9 @@ table tr.window-closed { color:red; font-style:italic; }
 body.loading .loader img { position:absolute; left:50%; top:50%; transform:translateX(-50%) translateY(-50%); height:40%; width:auto; display:none; }
 body.loading .loader span { position:absolute; left:50%; top:50%; transform:translateX(-50%) translateY(-50%); height:40%; width:auto; font-size:50pt; color:yellow;}*/
 
-body.loading .loader {} 
+body.loading .loader { position:relative; } 
 body.loading .loader span.bar { display:block; height:50px; position:absolute; left:0; background:#303030; }
-body.loading .loader span.status { position:relative; z-index:10; display:inline-block; font-size:50px; color:yellow;}
+body.loading .loader span.status { position:relative; z-index:10; display:inline-block; font-size:50px; color:yellow; top:-5px;}
 
 /*form input[type=text] { background:#303030; color:#yellow; padding:5px 6px; font-size:20pt; }*/
 form input { background:#303030; color:yellow; font-size:20pt; border:0; margin:0; margin-right:.9%; padding:5px .1%; }
@@ -45,9 +45,14 @@ body.rate-eth table td span.rate.eth {display:block;}
 
 body.rate-usd table tr a.rate.usd, body.rate-eth table tr a.rate.eth  { color:#fff; font-weight:bold; background:#333; border-radius:2px; display:inline-block; padding:2px 3px;}
 
-.meta { position:absolute; right:10px; top:10px; padding:12px; color:#999; font-size:9pt; width:222px;}
+.meta { position:absolute; right:10px; top:10px; padding:12px; color:#999; font-size:9pt; width:275px;}
 .meta h2 {font-size:11pt;}
 .meta a {color:#add8e6; text-decoration:none; }
+.meta p.address {font-size:7pt;}
+
+.eth-price {color:#999; display:none; font-size:10pt;}
+body.price-discovered .eth-price {display:block;}
+.eth-price .price-feed-source {color:#666;}
 
 @media screen and (min-width: 1000px) {
   body.loading #background-image {opacity:0;}
