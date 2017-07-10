@@ -5,7 +5,7 @@ body.loading .loader {display:block;}
 
 body {background:#000 url(); color:#f0f0f0; font-family: 'Source Code Pro', monospace; }
 
-#wrapper { max-width:700px; min-width:400px; margin:0 auto; position:relative; z-index:50; padding:10px;} 
+#wrapper { max-width:1000px; min-width:400px; margin:0 auto; position:relative; z-index:50; padding:10px;} 
 #table-wrapper {  background:rgba(9,9,9,0.5);  padding:11px; border-radius:3px;}
 
 table, thead, tbody, th, td, tr {border:0;}
@@ -27,13 +27,14 @@ body.loading .loader span { position:absolute; left:50%; top:50%; transform:tran
 
 body.loading .loader { position:relative; } 
 body.loading .loader span.bar { display:block; height:50px; position:absolute; left:0; background:#303030; }
-body.loading .loader span.status { position:relative; z-index:10; display:inline-block; font-size:50px; color:yellow; top:-5px;}
+body.loading .loader span.status { position:relative; z-index:10; display:inline-block; font-size:16pt; color:yellow; top:-5px;}
 
 /*form input[type=text] { background:#303030; color:#yellow; padding:5px 6px; font-size:20pt; }*/
 form input { background:#303030; color:yellow; font-size:20pt; border:0; margin:0; margin-right:.9%; padding:5px .1%; }
-form input.node {width:48%;}
-form input.days-to-check {width:23%;}
-form input[type=submit] {width:23%;}
+form input.node {width:47%;}
+form input.start-from {width:12%;}
+form input.days-to-check {width:12%;}
+form input[type=submit] {width:22%;}
 form input[type=submit]:disabled {opacity:0.22;}
 
 table span.rate.usd, table span.rate.eth {display:none;} 
@@ -54,7 +55,7 @@ body.rate-usd table tr a.rate.usd, body.rate-eth table tr a.rate.eth  { color:#f
 body.price-discovered .eth-price {display:block;}
 .eth-price .price-feed-source {color:#666;}
 
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 1100px) {
   body.loading #background-image {opacity:0;}
   body.results #background-image { left:-25%; opacity:.1;}
   #background-image { transition:all 1s ease-in-out; opacity:.1; position:fixed; z-index:1;  } 
@@ -62,7 +63,7 @@ body.price-discovered .eth-price {display:block;}
 }
 
 
-@media screen and (max-width: 999px) {
+@media screen and (max-width: 1099px) {
   #background-image {display:none;}
   body .meta {display:none;}
 }
